@@ -889,14 +889,16 @@ async function callGemini(userText) {
       messages.push({ role: h.role === 'model' ? 'assistant' : h.role, content: h.parts[0].text });
     });
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${geminiApiKey}`
+        'Authorization': `Bearer ${geminiApiKey}`,
+'HTTP-Referer': 'https://trisha108.github.io',
+'X-Title': 'Barkley Bites Chatbot'
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
         messages: messages,
         temperature: 0.75,
         max_tokens: 350
