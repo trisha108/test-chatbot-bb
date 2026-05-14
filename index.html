@@ -28,7 +28,6 @@
     justify-content: center;
   }
 
-  /* Demo page background */
   .demo-page {
     text-align: center;
     padding: 40px 20px;
@@ -115,7 +114,6 @@
   }
   .api-setup .save-btn:hover { background: var(--seafoam); }
 
-  /* ── FLOATING BUBBLE ── */
   #chat-bubble {
     position: fixed;
     bottom: 28px;
@@ -157,7 +155,6 @@
     50% { transform: scale(1.3); opacity: 0.7; }
   }
 
-  /* ── CHAT WINDOW ── */
   #chat-window {
     position: fixed;
     bottom: 104px;
@@ -183,7 +180,6 @@
     pointer-events: all;
   }
 
-  /* Header */
   .chat-header {
     background: linear-gradient(135deg, var(--ocean) 0%, var(--seafoam) 100%);
     padding: 18px 20px 16px;
@@ -236,7 +232,6 @@
   }
   .close-btn:hover { background: rgba(255,255,255,0.28); }
 
-  /* Profile banner */
   #profile-banner {
     background: linear-gradient(90deg, rgba(45,125,111,0.1), rgba(26,74,92,0.08));
     border-bottom: 1px solid rgba(45,125,111,0.15);
@@ -250,7 +245,6 @@
   }
   #profile-banner.visible { display: flex; }
 
-  /* Messages */
   #messages {
     flex: 1;
     overflow-y: auto;
@@ -297,7 +291,6 @@
     display: block;
   }
 
-  /* Typing indicator */
   .typing-indicator {
     display: flex;
     gap: 5px;
@@ -323,7 +316,6 @@
     30% { transform: translateY(-6px); opacity: 1; }
   }
 
-  /* Quick replies */
   #quick-replies {
     padding: 0 14px 10px;
     display: flex;
@@ -349,7 +341,6 @@
     transform: translateY(-1px);
   }
 
-  /* Input area */
   .chat-input-area {
     padding: 12px 14px 14px;
     background: white;
@@ -390,7 +381,6 @@
   #send-btn:hover { background: var(--seafoam); transform: scale(1.05); }
   #send-btn svg { width: 18px; height: 18px; fill: white; }
 
-  /* No API warning */
   .no-api-warning {
     background: #fff3ed;
     border: 1.5px solid #f0b999;
@@ -411,37 +401,34 @@
 </head>
 <body>
 
-<!-- Demo page content -->
 <div class="demo-page">
   <h1>🐟 Barkley Bites</h1>
   <p>This is a demo of the Barkley Bites AI chatbot.<br>Select a demo profile below, then click the chat bubble in the corner.</p>
 
   <div class="demo-profiles">
-    <button class="demo-profile-btn active" onclick="setProfile('sarah')">🐾 Sarah & Max (New Puppy)</button>
-    <button class="demo-profile-btn" onclick="setProfile('james')">🐕 James & Luna (Senior)</button>
-    <button class="demo-profile-btn" onclick="setProfile('priya')">🎂 Priya & Mochi (Birthday)</button>
-    <button class="demo-profile-btn" onclick="setProfile('guest')">👋 Guest (No Profile)</button>
+    <button class="demo-profile-btn active" onclick="setProfile('sarah', event)">🐾 Sarah & Max (New Puppy)</button>
+    <button class="demo-profile-btn" onclick="setProfile('james', event)">🐕 James & Luna (Senior)</button>
+    <button class="demo-profile-btn" onclick="setProfile('priya', event)">🎂 Priya & Mochi (Birthday)</button>
+    <button class="demo-profile-btn" onclick="setProfile('guest', event)">👋 Guest (No Profile)</button>
   </div>
   <p class="demo-note">Each profile demonstrates a different lifecycle stage and personalization.</p>
 
   <div class="api-setup">
-    <h3>⚙️ Groq API Key Required</h3>
+    <h3>⚙️ OpenRouter API Key Required</h3>
     <p style="font-size:0.82rem; color:#8a8070; line-height:1.5;">
-      Get a free key at <strong>console.groq.com</strong> → Sign up → API Keys → Create API Key (no credit card needed).
+      Get a free key at <strong>openrouter.ai</strong> → Sign up → Keys → Create Key (no credit card needed).
     </p>
-    <input type="password" id="api-key-input" placeholder="Paste your Groq API key here..." />
+    <input type="password" id="api-key-input" placeholder="Paste your OpenRouter API key here..." />
     <br>
     <button class="save-btn" onclick="saveApiKey()">Save Key & Start Chatting</button>
   </div>
 </div>
 
-<!-- Floating bubble -->
 <div id="chat-bubble" onclick="toggleChat()">
   <span class="bubble-icon">🐟</span>
   <div class="notif-dot"></div>
 </div>
 
-<!-- Chat window -->
 <div id="chat-window">
   <div class="chat-header">
     <div class="header-avatar">🐠</div>
@@ -457,11 +444,10 @@
   </div>
 
   <div id="messages"></div>
-
   <div id="quick-replies"></div>
 
   <div id="api-warning" class="no-api-warning" style="display:none">
-    No API key set. Add your free Groq key above to activate the AI.
+    No API key set. Add your free OpenRouter key above to activate the AI.
   </div>
 
   <div class="chat-input-area">
@@ -474,62 +460,34 @@
 </div>
 
 <script>
-// ─────────────────────────────────────────────
-// DEMO PROFILES
-// Replace with real Google Sheets data later
-// ─────────────────────────────────────────────
 const DEMO_PROFILES = {
   sarah: {
-    ownerName: "Sarah",
-    dogName: "Max",
-    breed: "Golden Retriever",
-    ageMonths: 4,
-    weightLbs: 18,
-    allergies: "none",
-    lifecycleStage: "NEW_PUPPY",
-    lastOrder: "Salmon Meal",
-    daysSinceOrder: 5,
-    vetNotes: "",
-    orderHistory: ["Salmon Meal x2", "Salmon Fillet x1"]
+    ownerName: "Sarah", dogName: "Max", breed: "Golden Retriever",
+    ageMonths: 4, weightLbs: 18, allergies: "none",
+    lifecycleStage: "NEW_PUPPY", lastOrder: "Salmon Meal", daysSinceOrder: 5,
+    vetNotes: "", orderHistory: ["Salmon Meal x2", "Salmon Fillet x1"]
   },
   james: {
-    ownerName: "James",
-    dogName: "Luna",
-    breed: "Labrador",
-    ageMonths: 96, // 8 years
-    weightLbs: 68,
-    allergies: "chicken",
-    lifecycleStage: "SENIOR_TRANSITION",
-    lastOrder: "Salmon Vegetable",
-    daysSinceOrder: 8,
+    ownerName: "James", dogName: "Luna", breed: "Labrador",
+    ageMonths: 96, weightLbs: 68, allergies: "chicken",
+    lifecycleStage: "SENIOR_TRANSITION", lastOrder: "Salmon Vegetable", daysSinceOrder: 8,
     vetNotes: "Vet recommended reducing carbs and joint support",
     orderHistory: ["Salmon Vegetable x3", "Salmon Fillet x2", "Salmon Jerky x1"]
   },
   priya: {
-    ownerName: "Priya",
-    dogName: "Mochi",
-    breed: "Shih Tzu",
-    ageMonths: 36,
-    weightLbs: 12,
-    allergies: "none",
-    lifecycleStage: "BIRTHDAY",
-    lastOrder: "Salmon Jerky",
-    daysSinceOrder: 3,
-    vetNotes: "",
-    orderHistory: ["Salmon Jerky x4", "Salmon Meal x2"]
+    ownerName: "Priya", dogName: "Mochi", breed: "Shih Tzu",
+    ageMonths: 36, weightLbs: 12, allergies: "none",
+    lifecycleStage: "BIRTHDAY", lastOrder: "Salmon Jerky", daysSinceOrder: 3,
+    vetNotes: "", orderHistory: ["Salmon Jerky x4", "Salmon Meal x2"]
   },
   guest: null
 };
 
-// ─────────────────────────────────────────────
-// SYSTEM PROMPT — Schuyler's voice + brand knowledge
-// Add [SCHUYLER_TO_FILL] sections when his replies arrive
-// ─────────────────────────────────────────────
 function buildSystemPrompt(profile) {
   const profileSection = profile ? `
 CURRENT CUSTOMER PROFILE:
 - Owner: ${profile.ownerName}
-- Dog: ${profile.dogName} (${profile.breed}, ${Math.round(profile.ageMonths/12 * 10)/10} years old, ${profile.weightLbs} lbs)
+- Dog: ${profile.dogName} (${profile.breed}, ${Math.round(profile.ageMonths/12*10)/10} years old, ${profile.weightLbs} lbs)
 - Allergies: ${profile.allergies}
 - Lifecycle Stage: ${profile.lifecycleStage}
 - Last Order: ${profile.lastOrder} (${profile.daysSinceOrder} days ago)
@@ -537,12 +495,12 @@ CURRENT CUSTOMER PROFILE:
 - Vet Notes: ${profile.vetNotes || 'none recorded'}
 
 LIFECYCLE BEHAVIOR RULES:
-- NEW_PUPPY: Be extra warm and educational. Focus on gradual food transition, puppy-specific nutrition, and reassure the owner. Offer transition guide.
+- NEW_PUPPY: Be extra warm and educational. Focus on gradual food transition, puppy-specific nutrition, and reassure the owner.
 - SENIOR_TRANSITION: Acknowledge age-related needs gently. Recommend lower-carb options like salmon-only fillets. Reference joint health if vet notes mention it. Never be alarmist.
 - BIRTHDAY: Open with a birthday celebration for the dog. Suggest the salmon jerky treat as a birthday snack. Keep it fun and warm.
-- RE_ENGAGE: Be warm, not pushy. Check in on the dog first, then gently ask if they'd like to reorder.
+- RE_ENGAGE: Be warm, not pushy. Check in on the dog first, then gently ask if they would like to reorder.
 - TRAVEL_PAUSE: Acknowledge they may be traveling. Offer to pause and remind about jerky as a travel option.
-- PET_LOSS: If the customer signals their pet has passed — respond with deep empathy, no promotions, flag for Schuyler to follow up personally. Say: "I'm so sorry for your loss. I'll make sure Schuyler knows so we can pause everything and reach out personally."
+- PET_LOSS: Respond with deep empathy, no promotions. Say you will make sure Schuyler knows so he can pause everything and reach out personally.
 - FIRST_TIME_CUSTOMER: Welcome warmly. Walk them through what Barkley Bites is and offer the starter guide.
 - STABLE: Normal helpful engagement. Reference their dog by name and last order.
 
@@ -550,106 +508,78 @@ PERSONALIZATION RULES:
 - Always address the dog by name.
 - Reference their order history naturally when recommending.
 - If vet notes exist, factor them into every food recommendation.
-- If a customer mentions a new vet recommendation, acknowledge it, give relevant guidance, and say "I'll save that note to your profile" — then add it to the conversation context.
+- If a customer mentions a new vet recommendation, acknowledge it, give relevant guidance, and say you will save that note to their profile.
 ` : `
-CURRENT USER: Guest (not registered)
-- Treat as a curious visitor. Be welcoming. Answer questions naturally.
-- Gently mention that registering lets them get personalized recommendations for their dog.
-- Don't push registration — just mention it once naturally if relevant.
+CURRENT USER: Guest (not registered).
+Treat as a curious visitor. Be welcoming. Answer questions naturally.
+Mention once, naturally, that registering lets them get personalized recommendations for their dog. Do not push it.
 `;
 
   return `You are Biscuit, the friendly AI assistant for Barkley Bites — a boutique seafood-first dog food brand based in Dallas, Texas, founded by Schuyler Ford.
 
 YOUR PERSONALITY:
 - You sound like Schuyler at the dog park — warm, knowledgeable, casual, never salesy.
-- You're passionate about dog health and food transparency.
 - You give real, specific answers — not vague corporate-speak.
-- You're prescriptive: when someone describes a situation, you suggest something specific, don't just give options.
-- You use the dog's name whenever possible.
-- You're never pushy about ordering. You educate first, recommend second.
+- You are prescriptive: when someone describes a situation, suggest something specific.
+- You use the dog's name whenever possible but not in every sentence.
+- You never push ordering. You educate first, recommend second.
 
-BRAND KNOWLEDGE — BARKLEY BITES:
+BRAND KNOWLEDGE:
 
 ORIGIN STORY:
-Schuyler noticed that Central Market discards large quantities of fresh, human-grade salmon daily — perfectly edible fish that just doesn't meet display standards. He saw an opportunity: use rescued seafood to make premium dog food. Nothing goes to waste. What doesn't sell within 4 days goes to a local pet shelter.
+Schuyler noticed that Central Market discards large quantities of fresh, human-grade salmon daily — perfectly edible fish that just does not meet display standards. He uses rescued seafood to make premium dog food. Nothing goes to waste. What does not sell within 4 days goes to a local pet shelter.
 
 WHY SEAFOOD:
-No other boutique dog food brand focuses on fish. Petco, PetSmart, Farmer's Dog, Nom Nom — none of them carry a real fish-based meal. Salmon is rich in omega-3 fatty acids, great for coat health, digestion, energy, and joint support. It's the protein most dogs haven't tried and almost all of them love.
+No other boutique dog food brand focuses on fish. Petco, PetSmart, Farmer's Dog, Nom Nom — none carry a real fish-based meal. Salmon is rich in omega-3 fatty acids, great for coat health, digestion, energy, and joint support.
 
-PRODUCTS (current):
-1. Salmon Meal — complete balanced meal with salmon, vegetables, and a starch (currently lentils — switched from rice after customer feedback, lentils are better for digestion)
+PRODUCTS:
+1. Salmon Meal — complete balanced meal with salmon, vegetables, and lentils (switched from rice after customer feedback — lentils are better for digestion)
 2. Salmon Vegetable — salmon with vegetables, lower starch, good for dogs on vet-recommended lower-carb diets
-3. Salmon Fillet (topper) — pure salmon, no starch, no veg. Used as a meal topper or for dogs whose vets recommended cutting carbs entirely. Most popular with senior dogs.
-4. Salmon Jerky — dehydrated salmon treat. $5. Travel-friendly, no refrigeration needed. Surprisingly the most popular item. Great as a hook product to introduce new customers.
+3. Salmon Fillet (topper) — pure salmon, no starch, no veg. For dogs whose vets recommended cutting carbs entirely. Most popular with senior dogs.
+4. Salmon Jerky — dehydrated salmon treat. $5. Travel-friendly, no refrigeration needed. The most popular item.
 
 PRICING:
-- Meals: $8 per container
-- Jerky: $5 per pack
-- No subscription model — Schuyler deliberately avoids subscriptions. Customers order when they need it.
+- Meals: $8 per container. Jerky: $5 per pack.
+- No subscription model — customers order when they need it.
 
-FRESHNESS & STORAGE:
-- 4-day freshness window. This is intentional — it proves there are no preservatives. Real fresh food doesn't last long.
+FRESHNESS AND STORAGE:
+- 4-day freshness window — intentional, proves there are no preservatives.
 - Keep refrigerated. Can be frozen to extend life.
 - Containers are microwavable, washable, stackable, and reusable.
 
-INGREDIENTS & TRANSPARENCY: [SCHUYLER_TO_FILL — awaiting his detailed sourcing answers]
-- All ingredients are human-grade.
-- Sourced from Central Market's daily surplus.
-- Small batch: 10-20 meals at a time, hand-prepared.
-
 COMMON COOKING QUESTIONS:
-- White foam on cooked salmon: This is the fat layer (albumin) coming out of the fish during cooking. It's completely safe and actually a sign the salmon is cooking properly. Not all salmon produces it — sockeye tends to more than other varieties.
-- Can dogs eat sweet potato? Yes. Schuyler actually shreds it thin so it resembles grass (which dogs eat instinctively). Sweet potato is highly digestible and acts as a gentle gut cleaner.
-- Can dogs eat zucchini? Yes, it's safe and nutritious.
-- Cinnamon? Safe in very small amounts but not necessary — Barkley Bites doesn't use it.
-- Bone broth? People buy it and dogs seem to benefit, but there's no scientific study confirming it. Schuyler is honest about this.
+- White foam on cooked salmon: This is albumin, a protein that comes out during cooking. Completely safe, sign the salmon is cooking properly.
+- Sweet potato: Safe and digestible. Schuyler shreds it thin so it resembles grass, which dogs eat instinctively.
+- Zucchini: Safe and nutritious for dogs.
+- Cinnamon: Safe in very small amounts but not used in Barkley Bites meals.
 
 FOOD TRANSITION ADVICE:
-When switching to Barkley Bites from any other food, go gradually:
 - Days 1-2: 25% Barkley Bites, 75% old food
 - Days 3-4: 50/50
 - Days 5-6: 75% Barkley Bites, 25% old food
 - Day 7+: Full Barkley Bites
-This prevents digestive upset, especially for sensitive stomachs like Goldendoodles.
 
 VET RECOMMENDATION HANDLING:
-If a customer says their vet recommended something (cut carbs, avoid a protein, add supplements):
 1. Acknowledge the vet's advice — never contradict it.
-2. Map it to the right Barkley Bites product (e.g., vet said cut carbs → recommend Salmon Fillet topper).
-3. Say "I'll make a note of that in your profile so your future recommendations are always tailored."
+2. Map it to the right product (vet said cut carbs → recommend Salmon Fillet).
+3. Say you will note that in their profile for future recommendations.
 
-WHAT BARKLEY BITES IS NOT:
-- Not a subscription service
-- Not mass-produced
-- Not sold in stores (delivery only for now)
-- Not trying to be like Farmer's Dog or Nom Nom — those are industrial scale. This is small batch, personal, local.
-
-ESCALATION TO SCHUYLER:
-For these situations, always end with: "I'll flag this for Schuyler to follow up with you personally."
-- Pet loss
-- Medical concerns beyond food recommendations
-- Order issues or complaints
-- Anything requiring a human decision
+ESCALATE TO SCHUYLER for: pet loss, medical concerns, order issues. Always say: "I will flag this for Schuyler to follow up with you personally."
 
 WHAT YOU DO NOT DO:
-- Never make up ingredients or products that aren't listed above.
-- Never promise features that don't exist yet (loyalty program, referrals — these are future plans).
+- Never invent products or ingredients not listed above.
+- Never promise features that do not exist yet (loyalty program, referrals — future plans).
 - Never give veterinary medical diagnoses.
-- Never be pushy about ordering.
-- If you don't know something, say "That's a great question — I'll flag it for Schuyler who can give you a proper answer."
-
-${profileSection}
+- If you do not know something: "That is a great question — I will flag it for Schuyler who can give you the proper answer."
 
 RESPONSE STYLE:
-- Keep responses concise — 2-4 sentences for simple questions, slightly longer for complex ones.
-- Use the dog's name naturally, not in every sentence.
-- Warm but not over-the-top — no excessive exclamation marks.
-- End responses with a gentle next step when relevant (not always).`;
+- 2 to 4 sentences for simple questions, slightly longer for complex ones.
+- Warm but not over the top — no excessive exclamation marks.
+- End with a gentle next step when relevant, but not always.
+
+${profileSection}`;
 }
 
-// ─────────────────────────────────────────────
-// QUICK REPLIES by lifecycle stage
-// ─────────────────────────────────────────────
 const QUICK_REPLIES = {
   NEW_PUPPY: ["🐾 Transition tips for puppies", "🐟 What's in the Salmon Meal?", "📦 How do I place an order?", "❓ Why only 4 days fresh?"],
   SENIOR_TRANSITION: ["🐟 Low-carb options for Luna", "💊 My vet said cut carbs", "📦 Reorder Salmon Fillet", "❓ Why seafood for seniors?"],
@@ -661,33 +591,23 @@ const QUICK_REPLIES = {
   guest: ["🐟 What is Barkley Bites?", "🌿 Why seafood-first?", "❓ How fresh is the food?", "🐾 Is this right for my dog?"]
 };
 
-// ─────────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────────
+// STATE — clean simple format, no mixed Gemini/Groq formats
 let currentProfile = DEMO_PROFILES['sarah'];
-let conversationHistory = [];
+let conversationHistory = []; // [{role:'user'|'assistant', content:'...'}]
 let chatOpen = false;
-let geminiApiKey = '';
+let apiKey = '';
 let chatInitialized = false;
 
-// ─────────────────────────────────────────────
-// PROFILE SELECTION
-// ─────────────────────────────────────────────
-function setProfile(key) {
+function setProfile(key, e) {
   document.querySelectorAll('.demo-profile-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  e.target.classList.add('active');
   currentProfile = DEMO_PROFILES[key];
   chatInitialized = false;
   conversationHistory = [];
-
-  // Reset chat if open
   document.getElementById('messages').innerHTML = '';
   document.getElementById('quick-replies').innerHTML = '';
   updateProfileBanner();
-
-  if (chatOpen) {
-    initChat();
-  }
+  if (chatOpen) initChat();
 }
 
 function updateProfileBanner() {
@@ -695,94 +615,67 @@ function updateProfileBanner() {
   const text = document.getElementById('profile-banner-text');
   if (currentProfile) {
     banner.classList.add('visible');
-    const stage = currentProfile.lifecycleStage.replace('_', ' ');
+    const stage = currentProfile.lifecycleStage.replace(/_/g, ' ');
     text.textContent = `🐾 ${currentProfile.dogName} · ${currentProfile.breed} · ${stage}`;
   } else {
     banner.classList.remove('visible');
   }
 }
 
-// ─────────────────────────────────────────────
-// API KEY
-// ─────────────────────────────────────────────
 function saveApiKey() {
   const val = document.getElementById('api-key-input').value.trim();
-  if (!val) { alert('Please paste your Gemini API key first.'); return; }
-  geminiApiKey = val; // stores Groq key
+  if (!val) { alert('Please paste your OpenRouter API key first.'); return; }
+  apiKey = val;
   document.getElementById('api-warning').style.display = 'none';
-  alert('API key saved! Open the chat bubble to start.');
+  alert('API key saved! Click the fish bubble to start chatting.');
 }
 
-// ─────────────────────────────────────────────
-// TOGGLE CHAT
-// ─────────────────────────────────────────────
 function toggleChat() {
   chatOpen = !chatOpen;
-  const win = document.getElementById('chat-window');
-  win.classList.toggle('open', chatOpen);
-
-  if (chatOpen && !chatInitialized) {
-    initChat();
-  }
-
-  if (!geminiApiKey && chatOpen) {
-    document.getElementById('api-warning').style.display = 'block';
-  }
+  document.getElementById('chat-window').classList.toggle('open', chatOpen);
+  if (chatOpen && !chatInitialized) initChat();
+  if (!apiKey && chatOpen) document.getElementById('api-warning').style.display = 'block';
 }
 
-// ─────────────────────────────────────────────
-// INIT CHAT — greeting based on profile
-// ─────────────────────────────────────────────
 function initChat() {
   chatInitialized = true;
   conversationHistory = [];
-  const messagesEl = document.getElementById('messages');
-  messagesEl.innerHTML = '';
-
+  document.getElementById('messages').innerHTML = '';
   updateProfileBanner();
 
   let greeting = '';
-
   if (!currentProfile) {
-    greeting = "Hey there! 🐟 I'm Biscuit, your guide to Barkley Bites — a boutique seafood-first dog food brand right here in Dallas. What can I help you with today?";
+    greeting = "Hey there! I'm Biscuit, your guide to Barkley Bites — a boutique seafood-first dog food brand right here in Dallas. What can I help you with today?";
     renderQuickReplies('guest');
   } else {
     const p = currentProfile;
-    const name = p.dogName;
-
     switch(p.lifecycleStage) {
       case 'NEW_PUPPY':
-        greeting = `Hi ${p.ownerName}! 🐾 How's little ${name} settling in? Puppies can have sensitive tummies when switching foods — I've got some great transition tips whenever you're ready. What's on your mind?`;
+        greeting = `Hi ${p.ownerName}! How's little ${p.dogName} settling in? Puppies can have sensitive tummies when switching foods — I've got some great transition tips whenever you're ready.`;
         break;
       case 'SENIOR_TRANSITION':
-        greeting = `Hey ${p.ownerName}! Great to see you. How's ${name} doing? I noticed your vet mentioned reducing carbs — we actually have a salmon-only fillet that's perfect for that. Want me to tell you more?`;
+        greeting = `Hey ${p.ownerName}! Great to see you. How's ${p.dogName} doing? I noticed your vet mentioned reducing carbs — we actually have a salmon-only fillet that's perfect for that. Want me to tell you more?`;
         break;
       case 'BIRTHDAY':
-        greeting = `🎂 Happy Birthday ${name}!! ${p.ownerName}, this is a big day — give that pup some extra love from us. We've got the perfect birthday treat idea for you!`;
+        greeting = `Happy Birthday ${p.dogName}! ${p.ownerName}, this is a big day — give that pup some extra love from us. We've got the perfect birthday treat idea for you!`;
         break;
       case 'RE_ENGAGE':
-        greeting = `${p.ownerName}! It's been a little while — hope ${name} is doing great. No pressure at all, just checking in. Anything I can help with today?`;
+        greeting = `${p.ownerName}! It's been a little while — hope ${p.dogName} is doing great. No pressure at all, just checking in. Anything I can help with today?`;
         break;
       case 'TRAVEL_PAUSE':
-        greeting = `Welcome back, ${p.ownerName}! Hope the trip went well. ${name} must be happy to have you home. Ready to get back on track with meals, or want to hear about our travel-friendly jerky?`;
+        greeting = `Welcome back, ${p.ownerName}! Hope the trip went well. ${p.dogName} must be happy to have you home. Ready to get back on track with meals, or want to hear about our travel-friendly jerky?`;
         break;
       default:
-        greeting = `Hey ${p.ownerName}! 🐟 How's ${name} doing? Happy to help with anything — orders, ingredients, feeding questions, whatever's on your mind.`;
+        greeting = `Hey ${p.ownerName}! How's ${p.dogName} doing? Happy to help with anything — orders, ingredients, feeding questions, whatever's on your mind.`;
     }
-
     renderQuickReplies(p.lifecycleStage);
   }
 
   addBotMessage(greeting);
-  // Seed history with just the greeting so Gemini has context
-  conversationHistory = [
-    { role: 'model', parts: [{ text: greeting }] }
-  ];
+  // Seed conversation history with greeting as assistant turn
+  conversationHistory = [{ role: 'assistant', content: greeting }];
 }
 
-// ─────────────────────────────────────────────
-// QUICK REPLIES
-// ─────────────────────────────────────────────
 function renderQuickReplies(stage) {
   const container = document.getElementById('quick-replies');
   container.innerHTML = '';
@@ -791,17 +684,11 @@ function renderQuickReplies(stage) {
     const btn = document.createElement('button');
     btn.className = 'qr-btn';
     btn.textContent = r;
-    btn.onclick = () => {
-      container.innerHTML = '';
-      handleUserInput(r);
-    };
+    btn.onclick = () => { container.innerHTML = ''; handleUserInput(r); };
     container.appendChild(btn);
   });
 }
 
-// ─────────────────────────────────────────────
-// MESSAGES
-// ─────────────────────────────────────────────
 function addBotMessage(text) {
   const msgs = document.getElementById('messages');
   const div = document.createElement('div');
@@ -828,7 +715,6 @@ function showTyping() {
   div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
-  return div;
 }
 
 function removeTyping() {
@@ -840,9 +726,6 @@ function escapeHtml(text) {
   return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// ─────────────────────────────────────────────
-// SEND MESSAGE
-// ─────────────────────────────────────────────
 function sendMessage() {
   const input = document.getElementById('user-input');
   const text = input.value.trim();
@@ -856,49 +739,38 @@ function handleUserInput(text) {
   if (!chatInitialized) initChat();
   document.getElementById('quick-replies').innerHTML = '';
   addUserMessage(text);
-  conversationHistory.push({ role: 'user', parts: [{ text }] });
 
-  if (!geminiApiKey) {
-    addBotMessage("To activate me, please paste your free Gemini API key in the setup box on the page. It only takes a minute — get it free at console.groq.com!");
+  if (!apiKey) {
+    addBotMessage("To activate me, please paste your free OpenRouter API key in the setup box above.");
     return;
   }
 
-  callGemini(text);
+  // Add user message to history
+  conversationHistory.push({ role: 'user', content: text });
+  callOpenRouter();
 }
 
-// ─────────────────────────────────────────────
-// GEMINI API CALL
-// ─────────────────────────────────────────────
-async function callGemini(userText) {
-  const typing = showTyping();
+async function callOpenRouter() {
+  showTyping();
   try {
     const systemPrompt = buildSystemPrompt(currentProfile);
 
-    // Gemini requires contents to start with 'user' and strictly alternate user/model
-    let rawHistory = conversationHistory.slice(-10);
-    while (rawHistory.length > 0 && rawHistory[0].role === 'model') {
-      rawHistory.shift();
-    }
-    if (rawHistory.length === 0) {
-      rawHistory = [{ role: 'user', parts: [{ text: userText }] }];
-    }
-
-    // Convert history to OpenAI-compatible format for Groq
-    const messages = [{ role: 'system', content: systemPrompt }];
-    rawHistory.forEach(h => {
-      messages.push({ role: h.role === 'model' ? 'assistant' : h.role, content: h.parts[0].text });
-    });
+    // Build clean messages array — system + last 12 turns
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...conversationHistory.slice(-12)
+    ];
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${geminiApiKey}`,
-'HTTP-Referer': 'https://trisha108.github.io',
-'X-Title': 'Barkley Bites Chatbot'
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://trisha108.github.io',
+        'X-Title': 'Barkley Bites Chatbot'
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        model: 'mistralai/mistral-7b-instruct:free',
         messages: messages,
         temperature: 0.75,
         max_tokens: 350
@@ -913,29 +785,28 @@ async function callGemini(userText) {
       return;
     }
 
-    const reply = data.choices?.[0]?.message?.content
-      || "I'm having trouble responding right now — please try again!";
-
+    const reply = data.choices?.[0]?.message?.content || "I'm having trouble responding right now — please try again!";
     addBotMessage(reply);
-    conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
 
-    // Capture vet notes into profile
-    const lower = userText.toLowerCase();
-    if ((lower.includes('vet said') || lower.includes('vet recommends') || lower.includes('vet told')) && currentProfile) {
-      currentProfile.vetNotes = (currentProfile.vetNotes ? currentProfile.vetNotes + ' | ' : '') + userText;
-      console.log('[VET NOTE SAVED]', currentProfile.vetNotes);
+    // Add assistant reply to history
+    conversationHistory.push({ role: 'assistant', content: reply });
+
+    // Capture vet notes
+    const last = conversationHistory[conversationHistory.length - 2];
+    if (last && last.role === 'user') {
+      const lower = last.content.toLowerCase();
+      if ((lower.includes('vet said') || lower.includes('vet recommends') || lower.includes('vet told')) && currentProfile) {
+        currentProfile.vetNotes = (currentProfile.vetNotes ? currentProfile.vetNotes + ' | ' : '') + last.content;
+      }
     }
 
   } catch (err) {
     removeTyping();
     addBotMessage("Connection issue — check your internet and API key, then try again.");
-    console.error('Gemini error:', err);
+    console.error('OpenRouter error:', err);
   }
 }
 
-// ─────────────────────────────────────────────
-// INPUT HELPERS
-// ─────────────────────────────────────────────
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
