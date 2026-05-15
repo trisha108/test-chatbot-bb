@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Barkley Bites — Chat with Biscuit</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  emailjs.init({ publicKey: 'w4hID9V2ZDiFvYOjE' });
+</script>
 <style>
   :root {
     --ocean: #1a4a5c;
@@ -570,17 +574,7 @@ WHAT YOU DO NOT DO:
 - Never invent products or ingredients not listed above.
 - Never promise features that do not exist yet (loyalty program, referrals — future plans).
 - Never give veterinary medical diagnoses.
-- Never make assumptions or fill in gaps with general knowledge. If the answer is not explicitly in your instructions, say: "I don't have that detail just yet — I'll flag it for Schuyler who can give you the proper answer."
-- Never guess specific ingredients, sourcing details, cooking methods, or nutritional breakdowns beyond what is listed above.
-- When you do not have specific information, always end your response with exactly this text on a new line: [CONTACT_SCHUYLER]
-
-WHAT YOU DO NOT KNOW YET (do not guess, always defer to Schuyler):
-- Exact vegetables used in each meal
-- Exact sourcing details beyond Central Market
-- Cooking process and preparation method
-- Full nutritional breakdown per serving
-- Portion sizes by breed or weight
-- Any new products not listed above
+- If you do not know something: "That is a great question — I will flag it for Schuyler who can give you the proper answer."
 
 RESPONSE STYLE:
 - 2 to 4 sentences for simple questions, slightly longer for complex ones.
@@ -703,22 +697,7 @@ function addBotMessage(text) {
   const msgs = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = 'msg bot';
-
-  const hasContactTrigger = text.includes('[CONTACT_SCHUYLER]');
-  const cleanText = text.replace('[CONTACT_SCHUYLER]', '').trim();
-
-  div.innerHTML = `<span class="msg-sender">🐠 Biscuit</span>${escapeHtml(cleanText).replace(/\n/g, '<br>')}`;
-
-  if (hasContactTrigger) {
-    const emailBtn = document.createElement('a');
-    emailBtn.href = 'mailto:schuyler.ford@me.com?subject=Question%20for%20Barkley%20Bites&body=Hi%20Schuyler%2C%0A%0AI%20had%20a%20question%20that%20Biscuit%20couldn\'t%20answer%3A%0A%0A[Your%20question%20here]%0A%0AThanks!';
-    emailBtn.textContent = '📧 Email Schuyler directly';
-    emailBtn.style.cssText = 'display:inline-block;margin-top:10px;padding:7px 14px;background:#1a4a5c;color:white;border-radius:20px;font-size:0.78rem;font-weight:500;text-decoration:none;transition:background 0.2s;';
-    emailBtn.onmouseover = () => emailBtn.style.background = '#2d7d6f';
-    emailBtn.onmouseout = () => emailBtn.style.background = '#1a4a5c';
-    div.appendChild(emailBtn);
-  }
-
+  div.innerHTML = `<span class="msg-sender">🐠 Biscuit</span>${escapeHtml(text).replace(/\n/g, '<br>')}`;
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
@@ -775,6 +754,26 @@ function handleUserInput(text) {
   callOpenRouter();
 }
 
+// ─────────────────────────────────────────────
+// AUTO EMAIL TO SCHUYLER via EmailJS
+// ─────────────────────────────────────────────
+async function sendEscalationEmail(customerMessage) {
+  try {
+    const ownerName = currentProfile ? currentProfile.ownerName : 'Guest';
+    const dogName = currentProfile ? currentProfile.dogName : 'Unknown';
+
+    await emailjs.send('service_c14ao3j', 'template_8vinlu8', {
+      owner_name: ownerName,
+      dog_name: dogName,
+      customer_message: customerMessage
+    });
+
+    console.log('[ESCALATION EMAIL SENT] To Schuyler for:', ownerName);
+  } catch (err) {
+    console.error('[ESCALATION EMAIL FAILED]', err);
+  }
+}
+
 async function callOpenRouter() {
   showTyping();
   try {
@@ -815,6 +814,31 @@ async function callOpenRouter() {
       || "I'm having trouble responding right now — please try again!";
     addBotMessage(reply);
     conversationHistory.push({ role: 'assistant', content: reply });
+
+    // Auto-escalate to Schuyler if needed
+   const escalationTriggers = [
+  'flag this for schuyler',
+  'flag it for schuyler',
+  'for schuyler to follow up',
+  'schuyler to follow up',
+  'schuyler will follow up',
+  'let schuyler know',
+  'pass this to schuyler',
+  'reach out to schuyler',
+  'contact schuyler',
+  'schuyler to get back',
+  'schuyler will get back',
+  'schuyler will reach out',
+  'schuyler will be in touch',
+  'follow up with you personally',
+  'pause everything'
+];
+    const replyLower = reply.toLowerCase();
+    const shouldEscalate = escalationTriggers.some(t => replyLower.includes(t));
+    if (shouldEscalate) {
+      const lastUserMsg = conversationHistory.filter(m => m.role === 'user').slice(-1)[0];
+      sendEscalationEmail(lastUserMsg ? lastUserMsg.content : 'No message captured');
+    }
 
     // Capture vet notes
     const last = conversationHistory[conversationHistory.length - 2];
